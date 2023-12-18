@@ -48,9 +48,10 @@ ___
 > 
 > ```*DOMAIN*/api``` - принимает ссылку и возвращает ее сокращенный вариант - стандартный эндпоинт - ```localhost:3000/api``` - POST запрос
 > 
-> ```*DOMAIN*/:url``` - перенаправляет на необходимый вебсайт по сокращенной ссылке - стандартный эндпоинт - ```localhost:3000/:url``` - GET запрос
-> 
-> Чтобы поменять функционал перенаправления на простой JSON ответ необходимо заменить последнюю строку в файлах ```routesPostgres.go``` и ```routesRedis.go``` на комментарий над ней
+> ```*DOMAIN*/:url``` - возвращает JSON-объект с оригинальной ссылкой - стандартный эндпоинт - ```localhost:3000/:url``` - GET запрос
+
+> [!IMPORTANT] 
+> Чтобы поменять функционал JSON ответа на автоматическое перенаправление необходимо заменить последнюю строку в файлах ```routesPostgres.go``` и ```routesRedis.go``` на комментарий над ней
 
 > [!TIP]
 > * Чтобы получить сокращенную ссылку, отправьте запрос POST на адрес ```*DOMAIN*/api```, в теле запроса укажите ссылку, которую нужно сократить в формате JSON:
@@ -65,7 +66,7 @@ ___
 
 * Использование двух разных хранилищ (Redis и Postgres SQL), с возможностью их поменять и кастомизировать
 * Настраиваемый Rate limiter для частых запросов api (<20 запросов за 10 секунд)
-* Настраиваемый Rate limiter для in-memory хранилища (120 запросов с одного IP-адресса в 30 минут)
+* Настраиваемый Rate limiter для in-memory хранилища
 * Возможность получить "красивую" ссылку
 * Стандартные сокращенные ссылки состоят из 10 символов (настраивается) - символов латинского алфавита в нижнем и верхнем регистрах, цифрах и граунда ("_")
 * Автоматический рестарт хранилищ и api при неполадках
@@ -123,9 +124,10 @@ There are 2 API endpoints:
 > 
 > ```*DOMAIN*/api``` - accepts url and returns its shortened variant - default endpoint - ```localhost:3000/api```
 > 
-> ```*DOMAIN*/:url``` - redirects to original website via provided short link - default endpoint - ```localhost:3000/:url```
-> 
-> To change redirect functionality to simple JSON response, you need to change the last line of code in ```routesPostgres.go``` and ```routesRedis.go``` files to the comment above it
+> ```*DOMAIN*/:url``` - returns JSON object with the original url - default endpoint - ```localhost:3000/:url```
+
+>[!IMPORTANT]  
+> To change JSON response to automatic redirect functionality, you need to swap the last line of code in ```routesPostgres.go``` and ```routesRedis.go``` files with the comment above it
 
 > [!TIP]
 > * To get short url, send POST request to ```*DOMAIN*/api``` and provide in the body JSON-formatted original url you wish to shorten: 
@@ -140,7 +142,7 @@ There are 2 API endpoints:
 
 * Customizable, changable dual storage capability (Redis and Postgres SQL)
 * Customizable Rate limiter for rapid api requests (<20 requests in 10 seconds)
-* Customizable Rate limiter for in-memory storage (120 requests from one IP-address in 30 minutes)
+* Customizable Rate limiter for in-memory storage
 * Ability yo provide custom short url
 * Default short urls are 10 characters long (customizable) - [a-z] and [A-Z] characters, numbers and low dash ("_")
 * Automatic storage and api restart if malfunction occurred
