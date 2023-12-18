@@ -30,4 +30,3 @@ WORKDIR /app
 EXPOSE 3000
 
 ENTRYPOINT ["./main"] 
-#CMD ["./main"]
