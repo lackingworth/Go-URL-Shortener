@@ -2,6 +2,8 @@ package helpers
 
 import (
 	"testing"
+
+	"github.com/joho/godotenv"
 )
 
 type addTest struct {
@@ -18,6 +20,12 @@ var addTests = []addTest{
 }
 
 func TestRemoveDomainError(t *testing.T) {
+	err := godotenv.Load("../.env")
+
+	if err != nil {
+		t.Errorf("Error loading .env file")
+	}
+	
 	for _, test := range addTests {
 		if output := RemoveDomainError(test.incomingString); output != test.resultBool {
 			t.Errorf("Output %v not equal to expected %v", output, test.resultBool)
