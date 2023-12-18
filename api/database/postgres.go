@@ -8,24 +8,23 @@ import (
 	"gorm.io/gorm"
 )
 
-var DbIsConnected bool = false
+var Dsn string = "host=postgres user=postgres password=pass dbname=shorturl port=5432 sslmode=disable"
 
-func CreatePostgresClient() *gorm.DB {
-	dsn := "host=postgres user=postgres password=pass dbname=shorturl port=5432 sslmode=disable" // For local testing change info to your local instance
+func CreatePostgresClient(dsn string) (*gorm.DB, error) {
 	var err error
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return db, err
 	}
 
 	err = db.AutoMigrate(&m.ResponseP{})
 
 	if err != nil {
 		fmt.Println(err)
+		return db, err
 	}
-
-	fmt.Println("Connected to Postgres")
 	
-	return db
+	return db, nil
 }

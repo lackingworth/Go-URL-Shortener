@@ -15,7 +15,7 @@ import (
 // Shorten provided url - POST req
 func ShortenURLDB(c *fiber.Ctx) error {
 	var res m.ResponseP = m.ResponseP{}
-	db := database.CreatePostgresClient()
+	db, _ := database.CreatePostgresClient(database.Dsn)
 	body := new(m.RequestP)
 
 	if err := c.BodyParser(&body); err != nil {
@@ -84,7 +84,7 @@ func ShortenURLDB(c *fiber.Ctx) error {
 // Redirect from short - GET req
 func ResolveURLDB(c *fiber.Ctx) error {
 	var str m.ResponseP = m.ResponseP{}
-	db := database.CreatePostgresClient()
+	db, _ := database.CreatePostgresClient(database.Dsn)
 	url := c.Params("url")
 	tx := db.Where("short_url = ?", os.Getenv("DOMAIN") + "/" + url).First(&str) // Getting URL from db
 	
