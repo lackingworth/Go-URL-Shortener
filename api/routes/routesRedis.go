@@ -13,6 +13,8 @@ import (
 	m "github.com/lackingworth/Go-URL-Short-Ozon/models"
 )
 
+var redisAddress = "redis:6379"
+
 func ShortenURL(c *fiber.Ctx) error {
 	body := new(m.RequestR)
 
@@ -21,7 +23,7 @@ func ShortenURL(c *fiber.Ctx) error {
 	}
 
 	// Rate limiter - 10 times in 30 minutes from the same IP
-	r2 := database.CreateClient(1)	
+	r2 := database.CreateClient(1, redisAddress)	
 	defer r2.Close()
 	value, err := r2.Get(database.Ctx, c.IP()).Result() // Find IP in db
 
@@ -55,7 +57,7 @@ func ShortenURL(c *fiber.Ctx) error {
 	body.URL = helpers.GeneralizeURL(body.URL)
 
 	
-	r := database.CreateClient(0)
+	r := database.CreateClient(0, redisAddress)
 	defer r.Close()
 	
 	// Check if URL already exists in db
@@ -72,7 +74,7 @@ func ShortenURL(c *fiber.Ctx) error {
 			URL:					body.URL,
 			CustomShort:			"",
 			Expiry:					body.Expiry,
-			XRateRemaining:			120,
+			XRateRemaining:			10,
 			XRateLimitReset: 		30,
 		}
 		
@@ -123,7 +125,7 @@ func ShortenURL(c *fiber.Ctx) error {
 		URL:					body.URL,
 		CustomShort:			"",
 		Expiry:					body.Expiry,
-		XRateRemaining:			120,
+		XRateRemaining:			10,
 		XRateLimitReset: 		30,
 	}
 
@@ -141,7 +143,7 @@ func ShortenURL(c *fiber.Ctx) error {
 
 func ResolveURL(c *fiber.Ctx) error {
 	url := c.Params("url")
-	r := database.CreateClient(0)
+	r := database.CreateClient(0, redisAddress)
 	defer r.Close()
 	value, err := r.Get(database.Ctx, url).Result() // Getting URL from Redis
 
@@ -154,7 +156,7 @@ func ResolveURL(c *fiber.Ctx) error {
 	value = helpers.GeneralizeURL(value)
 
 	// Increments counter
-	rInr := database.CreateClient(1)
+	rInr := database.CreateClient(1, redisAddress)
 	defer rInr.Close()
 	_ = rInr.Incr(database.Ctx, "counter")
 	

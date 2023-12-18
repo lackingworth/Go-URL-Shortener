@@ -9,9 +9,9 @@ import (
 var Ctx = context.Background()
 
 // Initializing the Redis Client
-func CreateClient(dbNo int) *redis.Client {
+func CreateClient(dbNo int, addr string) *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr: 		"redis:6379", // For local testing change to local address
+		Addr: 		addr, // For local testing change to local address
 		Password: 	"",
 		DB: 		dbNo,
 	})
