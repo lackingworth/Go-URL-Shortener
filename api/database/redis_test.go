@@ -3,8 +3,9 @@ package database
 import "testing"
 
 func TestCreateClient(t *testing.T) {
-	r1 := CreateClient(1)
-	r3 := CreateClient(3)
+	address := "127.0.0.1:6379"
+	r1 := CreateClient(1, address)
+	r3 := CreateClient(3, address)
 	
 	if r1 == nil{
 		t.Errorf("Redis not connected")
