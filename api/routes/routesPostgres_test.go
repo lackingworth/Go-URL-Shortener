@@ -206,9 +206,9 @@ func TestResolveURLDB(t *testing.T) {
 
 		str.URL = helpers.GeneralizeURL(str.URL)
 
-		// To get the url in response instead of redirect use 
-		// return c.Status(fiber.StatusOK).JSON(str.URL)
-		return c.Redirect(str.URL, 301)
+		// To redirect instead of getting the url in response use 
+		//return c.Redirect(str.URL, 301)
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"url": str.URL})
 	})
 
 	req1 := httptest.NewRequest("GET", "/R501T7OLLz", nil)
@@ -232,9 +232,9 @@ func TestResolveURLDB(t *testing.T) {
 
 		str.URL = helpers.GeneralizeURL(str.URL)
 
-		// To get the url in response instead of redirect use 
-		// return c.Status(fiber.StatusOK).JSON(str.URL)
-		return c.Redirect(str.URL, 301)
+		// To redirect instead of getting the url in response use 
+		//return c.Redirect(str.URL, 301)
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"url": str.URL})
 	})
 
 	req2 := httptest.NewRequest("GET", "/gibberishshortlink", nil)

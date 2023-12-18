@@ -160,7 +160,7 @@ func ResolveURL(c *fiber.Ctx) error {
 	defer rInr.Close()
 	_ = rInr.Incr(database.Ctx, "counter")
 	
-	// To get the url in response instead of redirect use 
-	// return c.Status(fiber.StatusOK).JSON(value)
-	return c.Redirect(value, 301) 
+	// To redirect instead of getting the url in response use 
+	//return c.Redirect(value, 301) 
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"url": value})
 }
