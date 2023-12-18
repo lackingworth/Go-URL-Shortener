@@ -4,18 +4,23 @@ import (
 	"errors"
 	"os"
 
-	"gorm.io/gorm"
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/lackingworth/Go-URL-Short-Ozon/database"
 	"github.com/lackingworth/Go-URL-Short-Ozon/helpers"
 	m "github.com/lackingworth/Go-URL-Short-Ozon/models"
+	"gorm.io/gorm"
 )
 
 // Shorten provided url - POST req
 func ShortenURLDB(c *fiber.Ctx) error {
 	var res m.ResponseP = m.ResponseP{}
-	db, _ := database.CreatePostgresClient(database.Dsn)
+	db, conErr := database.CreatePostgresClient(database.Dsn)
+
+	if conErr != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Error":"Error while connecting to database"})
+	}
+
 	body := new(m.RequestP)
 
 	if err := c.BodyParser(&body); err != nil {
@@ -48,6 +53,10 @@ func ShortenURLDB(c *fiber.Ctx) error {
 	var id string
 
 	// Check if user presented short url is unique
+	if body.CustomShort == "api" || body.CustomShort == "api/" {
+		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"Error":"Conflict with endpoint caught"})
+	}
+
 	if body.CustomShort != "" {
 		tx := db.Where("short_url = ?", body.CustomShort).First(&res)
 
@@ -66,8 +75,6 @@ func ShortenURLDB(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Error":"Error while retrieving query for short url"})
 		}
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"Error":"Custom URL already in use"})
-	} else if body.CustomShort == "api" || body.CustomShort == "api/" {
-		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"Error":"Conflict with endpoint caught"})
 	}
 
 	id = helpers.GenerateRandomString(10)
