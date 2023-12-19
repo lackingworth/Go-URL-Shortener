@@ -25,11 +25,14 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./dataPostgres:/data
+      - db-data:/postgres-data
   redis:
     build: redis
     restart: always
     ports:
       - "6379:6379"
     volumes:
-      - ./dataRedis:/data
+      - db-data:/redis-data
+
+volumes:
+  db-data:

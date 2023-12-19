@@ -29,4 +29,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-ENTRYPOINT ["./main"] 
+ENTRYPOINT ["./main"]
