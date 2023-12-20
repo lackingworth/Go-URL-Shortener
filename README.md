@@ -86,7 +86,7 @@ ___
 
 * Clone this repository to the location of your choosing
 * *(Optional)* Change provided ```.env``` and ```Dockerfile``` files for networking customization
-* Откройте консоль разработчика / Bash / PowerShell
+* Open Bash / PowerShell terminal
 * Navigate to the root directory of the cloned repository (where ```docker-compose.yml``` is located)
   using ```cd "path/to/directory"```
 > [!IMPORTANT]    
