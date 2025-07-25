@@ -1,4 +1,4 @@
-# Go-URL-Shortener-For-Ozon-Test
+# Go-URL-Shortener
 ___
 #### Русский:
 ___
